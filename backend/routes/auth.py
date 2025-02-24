@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, make_response
-from flask_jwt_extended import create_access_token, jwt_required, set_access_cookies
+from flask_jwt_extended import create_access_token, jwt_required, set_access_cookies, get_jwt_identity
 from models import db, User
 from schemas.userschema import user_schema,users_schema
 
@@ -71,3 +71,10 @@ def login():
 def get_users():
     all_users = User.query.all()  # Fetch all users
     return users_schema.jsonify(all_users)  # Serialize multiple users
+
+@auth_bp.route('/user', methods = ['GET'])
+@jwt_required()
+def get_user():
+    id = get_jwt_identity()
+    user = User.query.get(id)
+    return user_schema.jsonify(user)

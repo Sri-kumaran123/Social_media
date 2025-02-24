@@ -24,7 +24,7 @@ def post_commmand():
         "message":"comment posted"
     }), 200
 
-@comment_bp.route('/comment/<int:id>', methods = ['DELETE'])
+@comment_bp.route('/comment/<string:id>', methods = ['DELETE'])
 @jwt_required()
 def delete_comment(id):
     current_user_id = get_jwt_identity()
@@ -35,7 +35,7 @@ def delete_comment(id):
         post = Posts.query.get(comment.post_id)
         owner_user_id = post.user_id
         print(owner_user_id,current_user_id,id)
-        check = (int(owner_user_id) == int(current_user_id))
+        check = ((owner_user_id) == (current_user_id))
         print(not check)
         if not check:
             return jsonify({

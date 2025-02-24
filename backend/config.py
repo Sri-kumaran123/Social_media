@@ -15,3 +15,4 @@ class Config:
     JWT_ACCESS_COOKIE_NAME = "access_token_cookie"  # Name of the cookie
     JWT_REFRESH_COOKIE_NAME = "refresh_token_cookie"  # Optional for refresh token
     JWT_COOKIE_CSRF_PROTECT = False  # Set to True if using CSRF protection
+    
