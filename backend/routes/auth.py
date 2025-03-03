@@ -126,4 +126,17 @@ def uploaduser_img():
         return jsonify({"message": "Profile picture updated!", "image_url": file_path}), 200
     else:
         return jsonify({"error": "User not found"}), 404
+    
+@auth_bp.route('/changename', methods = ['POST'])
+@jwt_required()
+def change_name():
+    data = request.get_json()
+    user_id = get_jwt_identity()
+
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"message":"user not found"})
+    user.username = data.get("username")
+    db.session.commit()
+    return jsonify({"message":"name changes","user":user_schema.dump(user)})
         
