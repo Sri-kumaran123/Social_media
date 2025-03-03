@@ -5,10 +5,10 @@ import Feed from "../components/post";
 function Home(){
     return <div className="relative">
         <div className="">
-            <Status />
+            {/* <Status /> */}
         </div>
         <div>
-            <Feed />
+            {/* <Feed /> */}
         </div>
     </div>
 }

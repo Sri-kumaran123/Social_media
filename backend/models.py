@@ -13,6 +13,7 @@ class User(db.Model):
     _password = db.Column(db.Text, nullable=False)
     followers = db.Column(db.Integer,default=0)
     following = db.Column(db.Integer,default=0)
+    profile_path = db.Column(db.Text,nullable=True)
 
     @property
     def password(self):
@@ -64,4 +65,15 @@ class Connection(db.Model):
 
     follower = db.relationship("User", foreign_keys=[follower_id], backref="following_connections")
     following = db.relationship("User", foreign_keys=[following_id], backref="follower_connections")
+
+class Message(db.Model):
+    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    sender_id = db.Column(db.String(36), db.ForeignKey('user.id'), nullable=False)
+    receiver_id = db.Column(db.String(36), db.ForeignKey('user.id'), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    sender = db.relationship("User", foreign_keys=[sender_id])
+    receiver = db.relationship("User", foreign_keys=[receiver_id])
+
 

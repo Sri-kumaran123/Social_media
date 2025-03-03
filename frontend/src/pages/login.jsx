@@ -12,19 +12,19 @@ function Login() {
   const { loginUser, getUser } = useAuth();
   const user = useSelector((state) => state.User);
   const navigate = useNavigate(); // Corrected variable name
+  const [ifauth,setauth] = useState(false)
 
   // Redirect to home if the user is already logged in
-  useEffect(() => {
-    if (user?.id) {
-      navigate("/"); // Redirect to home or dashboard
-    } else {
-      getUser().then((res) => {
-        if (res?.id) {
-          navigate("/");
-        }
-      });
+  
+  useEffect(()=>{
+    getUser()
+    .then(res=>{
+      res?.data?.user?setauth(true):setauth(false)
+    })
+    if(ifauth){
+      navigate("/")
     }
-  }, [user, navigate, getUser]);
+  },[])
 
   const [useremailField, email] = InputBox({
     type: "text",

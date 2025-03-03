@@ -4,6 +4,10 @@ from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from config import Config
 from flask_marshmallow import Marshmallow
+from flask_socketio import  send, emit, join_room, leave_room
+from routes.chat import socketio
+
+
 
 
 
@@ -17,6 +21,8 @@ def create_app():
     app.config.from_object(Config)
     
     db.init_app(app)
+    # CORS(app, supports_credentials=True, origins="http://localhost:5173")
+    # socketio.init_app(app)  # Initialize SocketIO
     
     connection_trigger_add = text("""
     CREATE TRIGGER maintain_connection_add
@@ -91,18 +97,22 @@ def create_app():
     jwt.init_app(app)
     ma.init_app(app)
     # CORS(app)
-    CORS(app, supports_credentials=True, origins="http://localhost:5173")
+    CORS(app, supports_credentials=True,resources={r"/*": {"origins": "http://localhost:5173"}})
+
+    socketio.init_app(app)
 
     from routes.auth import auth_bp
     from routes.post import post_bp
     from routes.comments import comment_bp
     from routes.likes import likes_bp
     from routes.connection import connet_bp
+    from routes.chat import chat_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(post_bp)
     app.register_blueprint(comment_bp)
     app.register_blueprint(likes_bp)
     app.register_blueprint(connet_bp)
+    app.register_blueprint(chat_bp)
     
     return app

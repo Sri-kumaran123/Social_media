@@ -1,9 +1,9 @@
 
-function customButton2({onclike,text}){
+function customButton2({onclike,text,data}){
 
     return <button
     className="relative px-6 py-3 text-black bg-white border overflow-hidden border-gray-300 rounded-lg shadow-lg  transition-all duration-500 group cursor-pointer"
-    onClike={onclike}
+    onClike={onclike(data)}
     >
         
         <span className="relative z-10 transition-all duration-500 group-hover:text-white">{text}</span>

@@ -31,11 +31,11 @@ def get_follow():
         "msg":"done"
     })
 
-@connet_bp.route('/follow', methods = ['DELETE'])
+@connet_bp.route('/follow/<string:id>', methods = ['DELETE'])
 @jwt_required()
-def get_unfollow():
-    data = request.get_json()
-    follower_id = data.get("follower_id")
+def get_unfollow(id):
+    
+    follower_id = id
     following_id = get_jwt_identity()
     connection = Connection.query.filter_by(
         follower_id = follower_id,
@@ -51,11 +51,11 @@ def get_unfollow():
         "msg":"Unfollowed"
     })
 
-@connet_bp.route('/follower', methods = ['GET'])
+@connet_bp.route('/follower/<string:id>', methods = ['GET'])
 @jwt_required()
-def get_list_followers():
-    data = request.get_json()
-    user_id = data.get('user_id')  # Get from query params
+def get_list_followers(id):
+    
+    user_id = id  # Get from query params
 
     if not user_id:
         return jsonify({'error': 'user_id is required'}), 400
@@ -69,11 +69,11 @@ def get_list_followers():
 
     return jsonify({'followers': users_schema.dump(followers)}), 200
 
-@connet_bp.route('/following', methods = ['GET'])
+@connet_bp.route('/following/<string:id>', methods = ['GET'])
 @jwt_required()
-def get_list_following():
-    data = request.get_json()
-    user_id = data.get('user_id')  # Get from query params
+def get_list_following(id):
+    
+    user_id = id  # Get from query params
 
     if not user_id:
         return jsonify({'error': 'user_id is required'}), 400
@@ -85,7 +85,7 @@ def get_list_following():
 
     # Convert to JSON format
 
-    return jsonify({'followers': users_schema.dump(followers)}), 200
+    return jsonify({'following': users_schema.dump(followers)}), 200
 
 
 

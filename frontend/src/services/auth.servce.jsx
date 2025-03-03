@@ -33,10 +33,10 @@ export const useAuth = () => {
     try {
       
 
-      const { data } = await api.get("/user");
+      const response = await api.get("/user");
 
-      dispatch(loginUserAction(data.user));
-      return data.user;
+      dispatch(loginUserAction(response.data.user));
+      return response;
     } catch (error) {
       console.error("Failed to get user:", error);
       navigate("/login"); // Redirect on failure

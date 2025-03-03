@@ -16,7 +16,11 @@ import PrivateRoute from './pages/privateroute';
 import { useEffect } from 'react';
 import { useAuth } from './services/auth.servce';
 import { UserProfile } from './pages/userProfile';
-
+import UploadPost from './pages/addpost';
+import Connection from './pages/connection';
+import Explore from './pages/explore';
+import Message from './pages/message';
+import Popupuserprofile from './components/popupuserprofile';
 function App() {
   
   
@@ -34,9 +38,13 @@ function App() {
         <Route element={<PrivateRoute />} >
           <Route path='/' element={<Layout />}>
             <Route index element={<Home />} />
-            {
-              MENU.map((x,index)=><Route path={x.path} element={<Profile />} />)
-            }
+            <Route path="/profile/:id" element={<Popupuserprofile />} />
+              <Route path='/profile' element={<UserProfile user={false}/>} />
+              <Route path='/addpost' element={<UploadPost />} />
+              <Route path='/connection' element={<Connection />} />
+              <Route path='/search' element={<Explore />} />
+              <Route path='/chat' element={<Message />} />
+              
           </Route>
         </Route>
         

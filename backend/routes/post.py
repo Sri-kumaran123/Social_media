@@ -68,8 +68,9 @@ def get_post(id):
     response = make_response(jsonify({
         "post": post_schema.dump(post),
         "user": user_schema.dump(user),
-        "image_url": image_url,
-        "video_url": video_url
+        "image_path": image_url,
+        "video_path": video_url,
+        "post_id":id
     }))
 
     return response, 200

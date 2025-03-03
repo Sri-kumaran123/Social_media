@@ -9,7 +9,7 @@ export const MENU =[
     {name:"Profile", path:'/profile', icon:<CgProfile size={25} />},
     {name:"Home", path:'/', icon:<IoHomeSharp size={25}/>},
     {name:"Message", path:'/chat', icon:<RiMessage2Fill size={25}/>},
-    {name:"Post", path:'/post', icon:<IoMdAddCircle size={25}/>},
+    {name:"Post", path:'/addpost', icon:<IoMdAddCircle size={25}/>},
     {name:"Explore", path:'/search', icon:<MdOutlineTravelExplore size={25}/>},
-    {name:"Network", path:'/conection', icon:<MdGroups size={25}/>},
+    {name:"Network", path:'/connection', icon:<MdGroups size={25}/>},
 ]

@@ -5,12 +5,12 @@ from schemas.userschema import like_schema, likes_schema, users_schema
 
 likes_bp = Blueprint('likes', __name__)
 
-@likes_bp.route('/like', methods=['POST'])
+@likes_bp.route('/like/<string:id>', methods=['POST'])
 @jwt_required()
-def give_like():
-    data = request.get_json()
+def give_like(id):
+    # data = request.get_json()
     user_id = get_jwt_identity()
-    post_id = data.get('post_id')  # Fixed key
+    post_id = id  # Fixed key
 
     if not post_id:
         return jsonify({"error": "post_id is required"}), 400
@@ -28,12 +28,12 @@ def give_like():
         "like": like_schema.dump(new_like)
     }), 201  # Created status
 
-@likes_bp.route('/like', methods=['DELETE'])
+@likes_bp.route('/like/<string:id>', methods=['DELETE'])
 @jwt_required()
-def give_dislike():
-    data = request.get_json()
+def give_dislike(id):
+    # data = request.get_json()
     user_id = get_jwt_identity()
-    post_id = data.get('post_id')  # Fixed key
+    post_id = id  # Fixed key
 
     if not post_id:
         return jsonify({"error": "post_id is required"}), 400
@@ -63,13 +63,14 @@ def get_likeprovider():
         "Likers":users_schema.dump(Likers)
     }), 200
 
-@likes_bp.route('/liked', methods = ['GET'])
+@likes_bp.route('/liked/<string:id>', methods = ['GET'])
 @jwt_required()
-def check_liked():
-    data = request.get_json()
+def check_liked(id):
+    
     user_id = get_jwt_identity()
-    post_id = data.get('post_id')  # Fixed key
-
+    print(user_id)
+    post_id = id  # Fixed key
+    print(post_id)
     like = Likes.query.filter_by(user_id=user_id, post_id=post_id).first()
     if not like:
         return jsonify({
