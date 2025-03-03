@@ -7,6 +7,7 @@ import { IoPerson } from "react-icons/io5";
 import { FaPhone } from "react-icons/fa6";
 import { useRef, useState } from "react";
 import { useAuth } from "../services/auth.servce";
+import { useNavigate } from "react-router-dom";
 function Register(){
     const [alertMessage, setAlertMessage] = useState("");
     const status = useRef(null);
@@ -52,8 +53,9 @@ function Register(){
         })
         console.log("Logging in...");
       };
+      const navigate = useNavigate()
       const signupbtn = customButton({text:"sign up →", onclick:handleLogin,style:1});
-      const backtologbtn = customButton({text:"back to log in →", onclick:handleLogin});
+      const backtologbtn = customButton({text:"back to log in →", onclick:()=>{navigate("/login")}});
     return <div 
     className="flex items-center justify-center min-h-screen backdrop-blur-xl relative">
     {/* Alert Box */}

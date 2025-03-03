@@ -39,7 +39,7 @@ function Message() {
             {/* Chat Window */}
             <div className="flex-1 flex flex-col bg-white shadow-lg">
                 {selectedUser ? (
-                    <Chat senderId={currentuser.id} receiverId={selectedUser.id} receivername={selectedUser.username} />
+                    <Chat senderId={currentuser.id} receiverId={selectedUser.id} receviername={selectedUser.username} />
                 ) : (
                     <div className="flex flex-col items-center justify-center h-full text-gray-500">
                         <h1 className="text-2xl font-semibold">Select a conversation</h1>

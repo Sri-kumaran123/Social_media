@@ -100,3 +100,12 @@ export const getoneuser= async (id)=>{
 
     }
 }
+
+export const gethomepost = async () =>{
+    try{
+        const response = await api.get('/getpostunique')
+        return response
+    } catch (err){
+        
+    }
+}

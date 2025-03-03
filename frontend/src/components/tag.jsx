@@ -19,7 +19,7 @@ function Tag({username,url,id,time}){
     return <div className="flex items-center gap-3">
     <img src={`http://localhost:5000/download/${getFilename(url || user.profile_path)}`} alt="User" className="w-10 h-10 rounded-full" />
     <div>
-      <p className="font-semibold">{user.username}</p>
+      <p className="font-semibold">{user.username || username}</p>
       <p className="text-sm text-gray-500">{time}</p>
     </div>
   </div>

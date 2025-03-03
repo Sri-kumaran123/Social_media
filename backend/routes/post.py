@@ -3,7 +3,7 @@ import random
 from flask import Blueprint, request, jsonify, make_response, send_from_directory
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from werkzeug.utils import secure_filename
-from models import db, Posts, User
+from models import Connection, db, Posts, User
 from schemas.userschema import post_schema, posts_schema, user_schema
 
 post_bp = Blueprint('post', __name__)
@@ -118,3 +118,20 @@ def delete_post(id):
     db.session.commit()
 
     return jsonify({"message":"post deleted"}), 200
+
+@post_bp.route('/getpostunique', methods=['GET'])
+@jwt_required()
+def get_postforhome():
+    user_id = get_jwt_identity()
+    
+    # Get the list of users the current user is following
+    following_users = db.session.query(Connection.following_id).filter_by(follower_id=user_id).all()
+    following_ids = [user.following_id for user in following_users]
+    
+    # Include the user's own posts
+    following_ids.append(user_id)
+    
+    # Fetch posts from the user and their following
+    posts = Posts.query.filter(Posts.user_id.in_(following_ids)).order_by(Posts.id.desc()).all()
+    
+    return jsonify(posts_schema.dump(posts))

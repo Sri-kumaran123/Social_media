@@ -9,6 +9,7 @@ import api from "../services/axios.service";
 export const UserProfile = () => {
     const { id } = useParams();
     const [User, setUser] = useState({});
+    const currentuser = useSelector(state=>state.User);
     const { getUser } = useAuth();
     const [editing, setEditing] = useState(false);
     const [username, setUsername] = useState("");
@@ -31,13 +32,26 @@ export const UserProfile = () => {
                 setProfileImage(res.data.profile_path);
             });
         }
-    }, [id,profileImage,username]);
+    }, [id,profileImage]);
 
-    const handleSave = () => {
-        setUser(prev => ({ ...prev, username }));
-        setEditing(false);
-        setShowPopup(false);
+    const handleSave = async () => {
+        try {
+            const response = await api.post("/changename", { username }, {
+                headers: {
+                    Authorization: `Bearer ${currentuser.token}`, // Ensure authentication
+                },
+            });
+    
+            if (response.data.message === "name changes") {
+                setUser((prev) => ({ ...prev, username: response.data.user.username }));
+                setEditing(false);
+                setShowPopup(false);
+            }
+        } catch (error) {
+            console.error("Failed to update username:", error);
+        }
     };
+    
 
     const handleImageUpload = async (event) => {
         const file = event.target.files[0];
@@ -105,30 +119,40 @@ export const UserProfile = () => {
             </div>
 
             {showPopup && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-                        <h2 className="text-lg font-semibold mb-4">Edit Profile</h2>
-                        <input type="file" accept="image/*" onChange={handleImageUpload} className="mb-4" />
-                        <img src={`http://localhost:5000/download/${getFilename(profileImage)}`} alt="Preview" className="w-24 h-24 rounded-full mx-auto mb-4" />
-                        {editing ? (
-                            <input
-                                type="text"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                className="p-2 border rounded w-full"
-                            />
-                        ) : (
-                            <h1 className="text-2xl font-semibold">{User.username}</h1>
-                        )}
-                        {editing ? (
-                            <button onClick={handleSave} className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">Save</button>
-                        ) : (
-                            <button onClick={() => setEditing(true)} className="mt-2 bg-gray-300 px-4 py-2 rounded">Edit</button>
-                        )}
-                        <button onClick={() => setShowPopup(false)} className="mt-2 bg-red-500 text-white px-4 py-2 rounded">Close</button>
-                    </div>
-                </div>
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+            {User.id === currentuser.id ? (
+                <>
+                    <h2 className="text-lg font-semibold mb-4">Edit Profile</h2>
+                    <input type="file" accept="image/*" onChange={handleImageUpload} className="mb-4" />
+                    <img src={`http://localhost:5000/download/${getFilename(profileImage)}`} 
+                        alt="Preview" className="w-32 h-32 rounded-full mx-auto mb-4" />
+                    {editing ? (
+                        <input
+                            type="text"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            className="p-2 border rounded w-full"
+                        />
+                    ) : (
+                        <h1 className="text-2xl font-semibold">{User.username}</h1>
+                    )}
+                    {editing ? (
+                        <button onClick={handleSave} className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">Save</button>
+                    ) : (
+                        <button onClick={() => setEditing(true)} className="mt-2 bg-gray-300 px-4 py-2 rounded">Edit</button>
+                    )}
+                </>
+            ) : (
+                // 🔹 View-Only Mode: Enlarged Profile Image
+                <img src={`http://localhost:5000/download/${getFilename(profileImage)}`} 
+                    alt="Preview" className="w-64 h-64 rounded-full mx-auto" />
             )}
+            <button onClick={() => setShowPopup(false)} className="mt-4 bg-red-500 text-white px-4 py-2 rounded">Close</button>
+        </div>
+    </div>
+)}
+
         </div>
     );
 };

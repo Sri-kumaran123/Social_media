@@ -5,7 +5,7 @@ import axios from "axios";
 // Connect to Socket.IO backend with WebSocket and polling transport fallback
 const socket = io("http://localhost:5000", { transports: ["websocket", "polling"] });
 
-const Chat = ({ senderId, receiverId }) => {
+const Chat = ({ senderId, receiverId,receviername }) => {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
 
@@ -54,7 +54,7 @@ const Chat = ({ senderId, receiverId }) => {
         <div className="flex flex-col h-screen">
             {/* Header */}
             <div className="p-4 bg-blue-500 text-white text-lg font-semibold shadow-md">
-                Chat with {receiverId}
+                Chat with {receviername}
             </div>
 
             {/* Messages */}

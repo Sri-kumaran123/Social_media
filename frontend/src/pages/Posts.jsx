@@ -35,7 +35,7 @@ export const Posts = ({ post_id }) => {
             <div onClick={()=>{
                 navigate(`/profile/${data?.user?.id}`)
             }}>
-                <Tag  time={"g89"} id={data?.user?.id} url={data?.user?.profile_path}/>
+                <Tag  time={"2h"} id={data?.user?.id} username={data?.user?.username} url={data?.user?.profile_path}/>
             </div>
             <div>
                 {data.image_path ? (
@@ -53,6 +53,9 @@ export const Posts = ({ post_id }) => {
                         Your browser does not support the video tag.
                     </video>
                 )}
+            </div>
+            <div className="text-center">
+                {data?.post?.content}
             </div>
             <div>
                 <LinkeandComment data={data} handlevisible={handlevisible} />
@@ -141,7 +144,7 @@ function Popup({ data, handlevisible }) {
                                     <div onClick={()=>{
                                         navigate(`/profile/${x.user_id}`)
                                     }}>
-                                    <Tag  time={"g89"} id={x.user_id} />
+                                    <Tag  time={"2h"} id={x.user_id} />
                                     </div>
                                 </li>
                             ))}
