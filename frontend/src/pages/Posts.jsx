@@ -38,6 +38,7 @@ export const Posts = ({ post_id }) => {
                 <Tag  time={"2h"} id={data?.user?.id} username={data?.user?.username} url={data?.user?.profile_path}/>
             </div>
             <div>
+                {console.log("v",getFilename(data.video_path))}
                 {data.image_path ? (
                     <img
                         src={`http://localhost:5000/download/${getFilename(data.image_path)}`}
@@ -45,9 +46,9 @@ export const Posts = ({ post_id }) => {
                         className="w-full rounded-md"
                     />
                 ) : (
-                    <video controls className="w-full rounded-md">
+                    <video controls className="w-full rounded-md" src={`http://localhost:5000/download/${getFilename(data.video_path)}`}>
                         <source
-                            src={`http://localhost:5000/download/${getFilename(data.vedio_path)}`}
+                            src={`http://localhost:5000/download/${getFilename(data.video_path)}`}
                             type="video/mp4"
                         />
                         Your browser does not support the video tag.
