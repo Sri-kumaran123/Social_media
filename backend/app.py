@@ -107,6 +107,7 @@ def create_app():
     from routes.likes import likes_bp
     from routes.connection import connet_bp
     from routes.chat import chat_bp
+    from model.predtict import predict_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(post_bp)
@@ -114,5 +115,6 @@ def create_app():
     app.register_blueprint(likes_bp)
     app.register_blueprint(connet_bp)
     app.register_blueprint(chat_bp)
+    app.register_blueprint(predict_bp)
     
     return app

@@ -109,3 +109,26 @@ export const gethomepost = async () =>{
         
     }
 }
+
+export const timeAgo = (timestamp) => {
+    console.log("time", timestamp);
+    
+    const now = new Date();
+    const createdAt = new Date(timestamp);
+
+    // Convert both to UTC timestamps for accurate comparison
+    const nowUTC = now.getTime(); // Current time in milliseconds (UTC)
+    const createdAtUTC = createdAt.getTime(); // Provided timestamp in milliseconds (UTC)
+
+    const diffInSeconds = Math.floor((nowUTC - createdAtUTC) / 1000);
+    
+
+    if (diffInSeconds < 60) return `${diffInSeconds} seconds ago`;
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    if (diffInMinutes < 60) return `${diffInMinutes} minutes ago`;
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    if (diffInHours < 24) return `${diffInHours} hours ago`;
+    const diffInDays = Math.floor(diffInHours / 24);
+    
+    return `${diffInDays} days ago`;
+};

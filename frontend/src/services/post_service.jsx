@@ -42,9 +42,19 @@ export const givelike = async (post_id) =>{
 
 export const addcomment = async (post_id,content) =>{
     try {
+
         const response = await api.post('/comment',{post_id,content})
         return response
     } catch (err){
         
+    }
+}
+
+export const checkcomment= async (text) =>{
+    try{
+        const response = await api.post('/predict',{text});
+        return response;
+    } catch (err) {
+        return new Promise.reject();
     }
 }

@@ -121,6 +121,7 @@ export const UserProfile = () => {
             {showPopup && (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
         <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+            {console.log("this",currentuser.id,User.id)}
             {User.id === currentuser.id ? (
                 <>
                     <h2 className="text-lg font-semibold mb-4">Edit Profile</h2>

@@ -39,7 +39,7 @@ class Posts(db.Model):
     image_path = db.Column(db.Text, nullable=True)
     video_path = db.Column(db.Text, nullable=True)
     likes_count = db.Column(db.Integer, default=0)
-    
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     
     comments = db.relationship('Comment', backref='comments', lazy=True)
@@ -53,6 +53,7 @@ class Comment(db.Model):
     content = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.String(36), db.ForeignKey('user.id'), nullable=False)
     post_id = db.Column(db.String(36), db.ForeignKey('posts.id'), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 
 class Likes(db.Model):

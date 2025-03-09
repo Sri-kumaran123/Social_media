@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { addcomment, checkLike, getPost, givedislike, givelike } from "../services/post_service";
+import { checkcomment, addcomment, checkLike, getPost, givedislike, givelike } from "../services/post_service";
 import { FaHeart, FaRegHeart, FaComment } from "react-icons/fa";
 import inputBox from "../components/ui/inputbox";
 import customButton from "../components/ui/custombutton";
 import Tag from "../components/tag";
 // import { handlenavigate } from "../components/popupuserprofile";
 import { useNavigate } from "react-router-dom";
+import AlertMessage from "../components/ui/alertmessage";
+import { timeAgo } from "../services/ui.service";
 
 export const Posts = ({ post_id }) => {
     const [data, setData] = useState({ post_id });
@@ -35,7 +37,7 @@ export const Posts = ({ post_id }) => {
             <div onClick={()=>{
                 navigate(`/profile/${data?.user?.id}`)
             }}>
-                <Tag  time={"2h"} id={data?.user?.id} username={data?.user?.username} url={data?.user?.profile_path}/>
+                <Tag  time={timeAgo(data?.post?.created_at)} id={data?.user?.id} username={data?.user?.username} url={data?.user?.profile_path}/>
             </div>
             <div>
                 {console.log("v",getFilename(data.video_path))}
@@ -110,6 +112,8 @@ function Popup({ data, handlevisible }) {
     const [cmdfeild, cmd] = inputBox({ placeholder: "Enter comment", type: "text" });
     const [ch, setch] = useState(false);
     const navigate = useNavigate();
+    const [alertMessage, setAlertMessage] = useState(false);
+
 
     useEffect(() => {
         getPost(Data.post_id).then((res) => {
@@ -119,7 +123,17 @@ function Popup({ data, handlevisible }) {
     }, [ch]);
 
     const handleaddComment = () => {
-        addcomment(Data.post_id, cmd).then(() => setch((prev) => !prev));
+        checkcomment(cmd)
+        .then((res)=>{
+            console.log(res.data)
+            if(!res.data.result){
+                addcomment(Data.post_id, cmd).then(() => setch((prev) => !prev));
+            }
+            else{
+                setAlertMessage(true)
+                setTimeout(() => setAlertMessage(false), 3000);
+            }
+        })
     };
     const buttonfeild = customButton({ text: "Add", style: 1, onclick: handleaddComment });
 
@@ -129,6 +143,7 @@ function Popup({ data, handlevisible }) {
 
     return (
         <div className="fixed inset-0  bg-opacity-50 flex justify-center items-center">
+            {alertMessage && <AlertMessage msg={"you give wrong comment"} />}
             <div className="bg-white text-black p-6 rounded-lg shadow-lg max-w-md w-full">
                 <div className="flex justify-between items-center">
                     <h2 className="text-lg font-bold">Comments</h2>
@@ -145,7 +160,8 @@ function Popup({ data, handlevisible }) {
                                     <div onClick={()=>{
                                         navigate(`/profile/${x.user_id}`)
                                     }}>
-                                    <Tag  time={"2h"} id={x.user_id} />
+                                        {console.log("look",x)}
+                                    <Tag  time={timeAgo(x.created_at)} id={x.user_id} />
                                     </div>
                                 </li>
                             ))}
