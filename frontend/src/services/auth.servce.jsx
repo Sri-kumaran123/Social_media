@@ -23,7 +23,8 @@ export const useAuth = () => {
       const { data } = await api.post("/login", params);
       
       dispatch(loginUserAction(data.user));
-      navigate("/dashboard"); // Redirect after login
+      // navigate("/dashboard"); // Redirect after login
+      return data;
     } catch (error) {
       console.error("Login failed:", error);
     }

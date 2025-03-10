@@ -47,8 +47,22 @@ function Login() {
       return;
     }
 
-    await loginUser({ email, password });
-    navigate("/"); // Redirect to home after successful login
+    loginUser({ email, password })
+    .then(res=>{
+      console.log("login",res)
+      if (res == undefined){
+        setAlertMessage("⚠️ Invalid password or email");
+      setTimeout(() => setAlertMessage(""), 3000);
+      }
+      if (res.user) navigate("/");
+      
+        setAlertMessage(res.message);
+        setTimeout(() => setAlertMessage(""), 3000);
+      
+        
+      
+    })
+     // Redirect to home after successful login
   };
 
   return (

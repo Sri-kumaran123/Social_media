@@ -1,6 +1,6 @@
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
@@ -14,6 +14,8 @@ class User(db.Model):
     followers = db.Column(db.Integer,default=0)
     following = db.Column(db.Integer,default=0)
     profile_path = db.Column(db.Text,nullable=True)
+    blocked_until = db.Column(db.DateTime, nullable=True)  # Stores block time
+    wrong_word_attempts = db.Column(db.Integer, default=0)  # Tracks bad word usage
 
     @property
     def password(self):
@@ -25,6 +27,28 @@ class User(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self._password, password)
+    
+    def is_blocked(self):
+        """Check if user is currently blocked."""
+        return self.blocked_until is not None and self.blocked_until > datetime.utcnow()
+
+    def block(self, duration_minutes):
+        """Block user for a specific duration in minutes."""
+        self.blocked_until = datetime.utcnow() + timedelta(minutes=duration_minutes)
+        db.session.commit()
+
+    def unblock(self):
+        """Unblock the user manually."""
+        self.blocked_until = None
+        db.session.commit()
+
+    def increment_wrong_word_attempts(self):
+        """Increase bad word count, block user if limit is reached."""
+        self.wrong_word_attempts += 1
+        if self.wrong_word_attempts >= 3:  # Block after 3 offenses
+            self.block(10)  # Block for 1 hour
+            self.wrong_word_attempts = 0  # Reset attempts after blocking
+        db.session.commit()
     
     
     # One-to-many relationship: a user can have many posts

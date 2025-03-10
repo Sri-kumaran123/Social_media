@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 import random
 from flask import Blueprint, request, jsonify, make_response
@@ -53,6 +54,8 @@ def login():
     user = User.query.filter_by(email=email).first()
     if not user or not user.check_password(password):
         return jsonify({"message": "Invalid credentials"}), 401
+    
+    
 
     # Generate JWT token
     access_token = create_access_token(identity=user.id, additional_claims={"sub": str(user.id)})
@@ -61,6 +64,11 @@ def login():
         "message": "Login successful",
         "user": user_schema.dump(user)
     }))
+
+    if user.blocked_until and user.blocked_until > datetime.utcnow():
+        response = make_response(jsonify({
+            "message": f"Your account is blocked until {user.blocked_until}. Please try again later."
+        }))
 
     # Set the access token in an HTTP-only cookie
     set_access_cookies(response, access_token)
