@@ -21,6 +21,8 @@ import Connection from './pages/connection';
 import Explore from './pages/explore';
 import Message from './pages/message';
 import Popupuserprofile from './components/popupuserprofile';
+import Adminlayout from './pages/Adminlayout';
+import Adminpage from './pages/Adminpage';
 function App() {
   
   
@@ -35,6 +37,9 @@ function App() {
       <Routes>
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+        <Route path='/admin' element={<Adminlayout />}>
+        <Route index element={<Adminpage />} />
+        </Route>
         <Route element={<PrivateRoute />} >
           <Route path='/' element={<Layout />}>
             <Route index element={<Home />} />

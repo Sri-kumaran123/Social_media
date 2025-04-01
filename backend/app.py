@@ -72,6 +72,8 @@ def create_app():
     WHERE id = OLD.post_id;
     """)
 
+    
+
 #     delete_post_trigger = text("""
 #     CREATE TRIGGER delete_post
 # BEFORE DELETE ON posts
@@ -108,6 +110,7 @@ def create_app():
     from routes.connection import connet_bp
     from routes.chat import chat_bp
     from model.predtict import predict_bp
+    from routes.recommendation import recommend_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(post_bp)
@@ -116,5 +119,6 @@ def create_app():
     app.register_blueprint(connet_bp)
     app.register_blueprint(chat_bp)
     app.register_blueprint(predict_bp)
+    app.register_blueprint(recommend_bp)
     
     return app

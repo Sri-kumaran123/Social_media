@@ -101,4 +101,12 @@ class Message(db.Model):
     sender = db.relationship("User", foreign_keys=[sender_id])
     receiver = db.relationship("User", foreign_keys=[receiver_id])
 
+class Recommendation(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # Unique identifier
+    user_id = db.Column(db.String(36), db.ForeignKey('user.id'), nullable=False)
+    post_id = db.Column(db.String(36), db.ForeignKey('posts.id'), nullable=False)
+    likes = db.Column(db.Integer, default=0)
+    comments_count = db.Column(db.Integer, default=0)
+    time = db.Column(db.DateTime, default=datetime.utcnow)
+
 

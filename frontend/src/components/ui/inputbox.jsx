@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function inputBox({ type, placeholder, icon }) {
+function inputBox({ type, placeholder, icon,dataCy }) {
   const [text, setText] = useState("");
 
   return (
@@ -11,6 +11,7 @@ function inputBox({ type, placeholder, icon }) {
         type={type}
         value={text}
         onChange={(e) => setText(e.target.value)}
+        data-cy={dataCy} 
       />
       {icon && (
         <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-600">

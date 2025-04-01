@@ -15,21 +15,25 @@ function Register(){
         type: "text",
         placeholder: "Enter Email",
         icon: <MdEmail />,
+        dataCy: "email-input",
       });
       const [usernameField, username] = inputBox({
         type: "text",
         placeholder: "Enter Name",
         icon: <IoPerson />,
+        dataCy: "username-input",
       });
       const [userphoneField, phone] = inputBox({
         type: "number",
         placeholder: "Enter phone",
         icon: <FaPhone />,
+        dataCy: "phone-input",
       });
       const [passwordField, password] = inputBox({
         type: "password",
         placeholder: "Enter Password",
         icon: <RiLockPasswordFill />,
+        dataCy: "password-input",
       });
       const { loginUser, registerUser, user } = useAuth();
       const handleLogin = () => {
@@ -54,8 +58,8 @@ function Register(){
         console.log("Logging in...");
       };
       const navigate = useNavigate()
-      const signupbtn = customButton({text:"sign up →", onclick:handleLogin,style:1});
-      const backtologbtn = customButton({text:"back to log in →", onclick:()=>{navigate("/login")}});
+      const signupbtn = customButton({text:"sign up →", onclick:handleLogin,style:1,dataCy: "signup-button"});
+      const backtologbtn = customButton({text:"back to log in →", onclick:()=>{navigate("/login")},dataCy: "back-to-login"});
     return <div 
     className="flex items-center justify-center min-h-screen backdrop-blur-xl relative">
     {/* Alert Box */}

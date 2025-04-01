@@ -31,3 +31,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+*.csv
+
+backend/train (2).csv
+backend.zip
+
+backend/uploads/

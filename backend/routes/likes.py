@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from models import User, Comment, Posts, db, Likes
+from models import User, Comment, Posts, db, Likes, Recommendation
 from schemas.userschema import like_schema, likes_schema, users_schema
 
 likes_bp = Blueprint('likes', __name__)
@@ -20,7 +20,9 @@ def give_like(id):
         return jsonify({"message": "Like already given"}), 409  # Conflict status
 
     new_like = Likes(user_id=user_id, post_id=post_id)
+    new_recommend = Recommendation(user_id=user_id, post_id=post_id, likes = 1)
     db.session.add(new_like)
+    db.session.add(new_recommend)
     db.session.commit()
 
     return jsonify({
@@ -41,7 +43,8 @@ def give_dislike(id):
     like = Likes.query.filter_by(user_id=user_id, post_id=post_id).first()
     if not like:
         return jsonify({"message": "Like not found"}), 404
-
+    new_recommend = Recommendation(user_id=user_id, post_id=post_id, likes = 0)
+    db.session.add(new_recommend)
     db.session.delete(like)
     db.session.commit()
 

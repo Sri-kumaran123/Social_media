@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, make_response
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from models import User, Comment, db, Posts
+from models import User, Comment, db, Posts, Recommendation
 from schemas.userschema import comment_schema, comments_schema
 
 comment_bp = Blueprint('comment', __name__)
@@ -17,7 +17,14 @@ def post_commmand():
         post_id = post_id,
         content = content
     )
+    new_recommend = Recommendation(
+        user_id = user_id,
+        post_id = post_id,
+        comments_count = 1
+    )
     db.session.add(new_comment)
+
+    db.session.add(new_recommend)
     db.session.commit()
     return jsonify({
         "comment":comment_schema.dump(new_comment),
@@ -49,6 +56,12 @@ def delete_comment(id):
         return jsonify({
             "message":'comment deleted by the owner of the post'
         }), 200
+    new_recommend = Recommendation(
+        user_id = current_user_id,
+        post_id = id,
+        comments_count = 0
+    )
+    db.session.add(new_recommend)
     db.session.delete(comment)
     db.session.commit()
     return jsonify({

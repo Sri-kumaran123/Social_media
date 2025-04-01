@@ -78,7 +78,6 @@ def login():
 
 # Protect routes with JWT
 @auth_bp.route('/protected', methods=['GET'])
-@jwt_required()  # Ensure this is the correct decorator for JWT authentication
 def get_users():
     all_users = User.query.all()  # Fetch all users
     return users_schema.jsonify(all_users)  # Serialize multiple users
